@@ -66,14 +66,15 @@ def main():
     customers_in_system = 0
     average_customers_in_system = 0
     average_customers_in_queue = 0
+    total_samples = 0 
 
     proportions = defaultdict(int)
-
+    num_steps = len(np.arange(1, simulation_time + 1, 0.001))
     for time in np.arange(1, simulation_time + 1, 0.001):
-        average_customers_in_queue += len(queue) / simulation_time
-        average_customers_in_system += customers_in_system / simulation_time
+        average_customers_in_queue += len(queue) / num_steps
+        average_customers_in_system += customers_in_system / num_steps
         proportions[customers_in_system] += 0.001
-
+        
         # Handle new arrivals
         while p < len(people) and people[p].arrival_time <= time:
             people[p].queue_entry_time = time
@@ -98,8 +99,8 @@ def main():
 
     # Final stats
     utilization = time_server_busy / simulation_time
-    avg_customers_in_system = average_customers_in_system
-    avg_customers_in_queue = average_customers_in_queue
+    avg_customers_in_system = average_customers_in_system 
+    avg_customers_in_queue = average_customers_in_queue 
     avg_time_in_system = time_spent_in_system / customers_served
     avg_time_in_queue = time_spent_in_queue / customers_served
 
