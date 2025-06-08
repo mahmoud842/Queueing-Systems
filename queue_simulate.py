@@ -152,34 +152,40 @@ def print_results_comparison(arrival_rate, service_rate):
 def plot_simulation_wq_vs_utilization():
     service_rate = 12
     utilization_values = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-    wq_values = []
+    sim_wq_values = []
+    theo_wq_values = []
 
-    for p in utilization_values:
-        arrival_rate = p * service_rate
+    for rho in utilization_values:
+        arrival_rate = rho * service_rate
+        
         result = simulate_queue(arrival_rate, service_rate, simulation_time=5000)
-        wq_values.append(result["Wq"])  # already in minutes
+        sim_wq_values.append(result["Wq"])  # Wq in minutes
+        
+        Wq_theoretical = (arrival_rate / (service_rate * (service_rate - arrival_rate))) / 60
+        theo_wq_values.append(Wq_theoretical)
 
     plt.figure(figsize=(10, 6))
-    plt.plot(utilization_values, wq_values, marker='o', color='blue', label='Simulation Wq')
-    plt.title("Simulation: Average Queue Time (Wq) vs Utilization (ρ)")
-    plt.xlabel("Utilization (ρ)")
-    plt.ylabel("Average Waiting Time in Queue (Wq) [minutes]")
+    # simulation line
+    plt.plot(utilization_values, sim_wq_values, marker='o', linestyle='-', label='Simulation $W_q$')
+    # theoretical line
+    plt.plot(utilization_values, theo_wq_values, marker='s', linestyle='--', label='Theoretical $W_q$')
+    plt.title("Average Queue Time in Queue ($W_q$) vs Utilization ($\\rho$)")
+    plt.xlabel("Utilization ($\\rho$)")
+    plt.ylabel("Average Waiting Time in Queue ($W_q$) [minutes]")
     plt.grid(True)
     plt.legend()
     plt.tight_layout()
     plt.show()
 
-
-
 if __name__ == "__main__":
-    # print_results_comparison(4, 12)
-    # print("-" * 55)
-    # print()
-    # print_results_comparison(6, 12)
-    # print("-" * 55)
-    # print()
-    # print_results_comparison(10, 12)
-    # print("-" * 55)
-    # print()
+    print_results_comparison(4, 12)
+    print("-" * 55)
+    print()
+    print_results_comparison(6, 12)
+    print("-" * 55)
+    print()
+    print_results_comparison(10, 12)
+    print("-" * 55)
+    print()
 
     plot_simulation_wq_vs_utilization()
